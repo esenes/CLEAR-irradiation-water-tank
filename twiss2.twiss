@@ -1,0 +1,68 @@
+@ NAME             %05s "TWISS"
+@ TYPE             %05s "TWISS"
+@ SEQUENCE         %13s "CLEARSEQUENCE"
+@ PARTICLE         %08s "ELECTRON"
+@ MASS             %le     0.0005109989461
+@ CHARGE           %le                  -1
+@ ENERGY           %le                 0.2
+@ PC               %le        0.1999993472
+@ GAMMA            %le         391.3902397
+@ KBUNCH           %le                   1
+@ BCURRENT         %le                   0
+@ SIGE             %le               0.001
+@ SIGT             %le                   1
+@ NPART            %le                   0
+@ EX               %le                   1
+@ EY               %le                   1
+@ ET               %le               0.001
+@ LENGTH           %le               5.522
+@ ALFA             %le                   0
+@ ORBIT5           %le                  -0
+@ GAMMATR          %le                   0
+@ Q1               %le         1.916093651
+@ Q2               %le        0.5165080842
+@ DQ1              %le                   0
+@ DQ2              %le                   0
+@ DXMAX            %le                   0
+@ DYMAX            %le                   0
+@ XCOMAX           %le                   0
+@ YCOMAX           %le                   0
+@ BETXMAX          %le         17.04340411
+@ BETYMAX          %le         396.6734912
+@ XCORMS           %le                   0
+@ YCORMS           %le                   0
+@ DXRMS            %le                   0
+@ DYRMS            %le                   0
+@ DELTAP           %le                   0
+@ SYNCH_1          %le                   0
+@ SYNCH_2          %le                   0
+@ SYNCH_3          %le                   0
+@ SYNCH_4          %le                   0
+@ SYNCH_5          %le                   0
+@ TITLE            %15s "CLEAR VHEE exp."
+@ ORIGIN           %17s "5.03.06 Darwin 64"
+@ DATE             %08s "04/09/18"
+@ TIME             %08s "11.09.16"
+* NAME                                S               BETX               BETY 
+$ %s                                %le                %le                %le 
+ "CLEARSEQUENCE$START"                   0                 10                 10
+ "MQF350"                         0.226         4.74586158          18.849331
+ "DRIFT_0"                          0.4       0.5297172415        38.83571488
+ "MQD355"                         0.626        1.315619262        38.97158428
+ "DRIFT_0"                          0.8        7.367551652        19.08119813
+ "MQF360"                         1.026        12.49715344         11.4508724
+ "DRIFT_1"                        2.156        1.152082034        26.10017983
+ "MTV390"                         2.156        1.152082034        26.10017983
+ "DRIFT_2"                        3.896        8.730655598        60.58291466
+ "MQF510"                         4.122        4.860418682        138.7626975
+ "DRIFT_3"                        4.346       0.1194324677        396.6734912
+ "MQD515"                         4.572         2.92365444        367.1530929
+ "DRIFT_3"                        4.796        17.04340411        92.81500347
+ "MQF520"                         5.022        16.29991625        16.29991625
+ "DRIFT_4"                        5.222                  3                  3
+ "STARTTANK"                      5.222                  3                  3
+ "DRIFT_5"                        5.372      0.00751884434      0.00751884434
+ "CENTRETANK"                     5.372      0.00751884434      0.00751884434
+ "DRIFT_5"                        5.522                  3                  3
+ "ENDTANK"                        5.522                  3                  3
+ "CLEARSEQUENCE$END"               5.522                  3                  3

@@ -5,7 +5,7 @@
  ** Eugenio Senes
  ** Created 03/09/18
  ******************************************************************/
-TITLE, "CLEAR tank";
+TITLE, "CLEAR VHEE exp.";
 /******************************************************************
  ** User input-variables after the measurement via quad-scan
  ******************************************************************/
@@ -18,12 +18,12 @@ BETY0 = 10.;
 /******************************************************************
  ** Enter your desiderata
  ******************************************************************/
-BETx_centre = 1e-3;
+/* BETx_centre = 1e-3;
 BETy_centre = 1e-3;
 BETx_init = 1;
 BETy_init = 1;
 BETx_end = 1;
-BETy_end = 1;
+BETy_end = 1; */
 
 /******************************************************************
  ** There we go !
@@ -47,18 +47,18 @@ TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, F
  ** Matching
  ******************************************************************/
 MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx=0;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety=0;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx=2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety=2;
- 	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
- 	/* VARY, name=k355, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
-	/* VARY, name=k360, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
-	/* VARY, name=k510, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
-	/* VARY, name=k515, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
-	/* VARY, name=k520, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=3;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=3;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx<1e-2;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety<1e-2;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx=3;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety=3;
+ 	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+ 	VARY, name=k355, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+	VARY, name=k360, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+	VARY, name=k510, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+	VARY, name=k515, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+	VARY, name=k520, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
 	VARY, name=k350, STEP=1e-6;
 	VARY, name=k355, STEP=1e-6;
 	VARY, name=k360, STEP=1e-6;
