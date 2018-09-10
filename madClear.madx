@@ -1,6 +1,8 @@
 /******************************************************************
  ** MAD-X CLEAR OPTICS FOR THE VHEE IRRADIATION EXPERIMENT
- **
+ ** This is the first attempt, optimisation has to be done by hand
+ ** using the match and try to get reasonable values for the betas
+ **	at the entrance and waist of the tank
  **
  ** Eugenio Senes
  ** Created 03/09/18
@@ -14,6 +16,8 @@ ALFX0 = -0.5;
 BETX0 = 10.;
 ALFY0 = -0.5;
 BETY0 = 10.;
+EMIX = 10e-6;
+EMIY = 10e-6;
 
 /******************************************************************
  ** Enter your desiderata
@@ -47,12 +51,12 @@ TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;!,
  ** Matching
  ******************************************************************/
 MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=2;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=20;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=20;
 	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx<1e-2;
 	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety<1e-2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx=2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety=2;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx=20;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety=20;
  	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
  	VARY, name=k355, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
 	VARY, name=k360, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
@@ -71,4 +75,13 @@ MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
 SELECT, FLAG=TWISS, COLUMN=name, s, betx, bety;
 TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='final.twiss';
 PLOT, HAXIS=S, VAXIS1=BETX, VAXIS2=BETY, colour=100, HMAX=5.53;
+
+DISTANCE = TABLE(TWISS, centreTank, S)-TABLE(TWISS, startTank, S);
+ANGLE = ATAN(SQRT(EMIX*(TABLE(TWISS, startTank, betx) - TABLE(TWISS, centreTank, betx)))/DISTANCE);
+value ANGLE;
+
+ANGLE_DEG = ANGLE*360/(2*PI);
+value ANGLE_DEG;
+
+
 STOP;
