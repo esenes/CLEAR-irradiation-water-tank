@@ -1,6 +1,6 @@
 ! define element classes
-qf	:	quadrupole, L=0.226;
-qd	: quadrupole, L=0.226;
+qf	:	quadrupole, L=0.226, THICK = true;
+qd	: quadrupole, L=0.226, THICK = true;
 MTV	: MARKER;
 
 clearSequence:	SEQUENCE, L=5.522 , REFER=entry;

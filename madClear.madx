@@ -1,5 +1,5 @@
 /******************************************************************
- * MAD-X CLEAR OPTICS
+ ** MAD-X CLEAR OPTICS FOR THE VHEE IRRADIATION EXPERIMENT
  **
  **
  ** Eugenio Senes
@@ -7,7 +7,7 @@
  ******************************************************************/
 TITLE, "CLEAR VHEE exp.";
 /******************************************************************
- ** User input-variables after the measurement via quad-scan
+ ** Beam parameters from measurements
  ******************************************************************/
 ENERGY = 0.200; !GeV
 ALFX0 = -0.5;
@@ -41,18 +41,18 @@ beam, PARTICLE=electron, ENERGY=ENERGY;
 USE, SEQUENCE=clearSequence;
 
 /* SURVEY, SEQUENCE=clearSequence, FILE='survey.out'; */
-TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='twiss.twiss';
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;!, FILE='twiss.twiss';
 
 /******************************************************************
  ** Matching
  ******************************************************************/
 MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=3;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=3;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=2;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=2;
 	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx<1e-2;
 	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety<1e-2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx=3;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety=3;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx=2;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety=2;
  	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
  	VARY, name=k355, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
 	VARY, name=k360, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
@@ -68,13 +68,7 @@ MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
 	SIMPLEX, CALLS=1e6, TOLERANCE=1.0e-21;
  ENDMATCH;
 
-SELECT, FLAG=TWISS, COLUMN=name, s , BETX, BETY;
-TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='twiss2.twiss';
-
+SELECT, FLAG=TWISS, COLUMN=name, s, betx, bety;
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='final.twiss';
 PLOT, HAXIS=S, VAXIS1=BETX, VAXIS2=BETY, colour=100, HMAX=5.53;
 STOP;
-
-
-!!! OPEN POINTS:
-! 1) for quads is the magnetic length or the physical length to be input ?
-! 2)
