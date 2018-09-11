@@ -1,0 +1,97 @@
+/******************************************************************
+ ** MAD-X CLEAR OPTICS FOR THE VHEE IRRADIATION EXPERIMENT
+ ** Using the custom variable of the match to optimise the angle
+ **
+ ** Eugenio Senes
+ ** Created 03/09/18
+ ******************************************************************/
+TITLE, "CLEAR VHEE exp.";
+/******************************************************************
+ ** Beam parameters from measurements
+ ******************************************************************/
+ENERGY = 0.200; !GeV
+ALFX0 = -0.5;
+BETX0 = 10.;
+ALFY0 = -0.5;
+BETY0 = 10.;
+EMIX = 10e-6;
+EMIY = 10e-6;
+
+/******************************************************************
+ ** Enter your desiderata
+ ******************************************************************/
+/* BETx_centre = 1e-3;
+BETy_centre = 1e-3;
+BETx_init = 1;
+BETy_init = 1;
+BETx_end = 1;
+BETy_end = 1; */
+
+/******************************************************************
+ ** Dummy initial values to start and avoid NaN in for MVAR1
+ ******************************************************************/
+k350	:=	10.72;
+k355	:=	-14.31;
+k360	:=	16.75;
+k510	:=	16.84;
+k515	:=	-15.67;
+k520	:=	21.11;
+
+call, file='sequence.seq'; !strengths are defined in the sequence file
+
+beam, PARTICLE=electron, ENERGY=ENERGY;
+USE, SEQUENCE=clearSequence;
+/* SURVEY, SEQUENCE=clearSequence, FILE='survey.out'; */
+
+/******************************************************************
+ ** Custom variables and TWISS settings
+ ******************************************************************/
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;!, FILE='twiss.twiss';
+
+DISTANCE := TABLE(TWISS, centreTank, S)-TABLE(TWISS, startTank, S);
+ANGLE_X := ATAN(SQRT(EMIX*(TABLE(TWISS, startTank, betx) - TABLE(TWISS, centreTank, betx)))/DISTANCE);
+ANGLE_X_DEG := ANGLE_X*360/(2*PI);
+
+/* ANGLE_Y := ATAN(SQRT(EMIY*(TABLE(TWISS, startTank, bety) - TABLE(TWISS, centreTank, bety)))/DISTANCE);
+ANGLE_Y_DEG := ANGLE_Y*360/(2*PI); */
+
+MVAR1 := ANGLE_X_DEG; !mvar1 and 2 are for the matching to work
+/* MVAR2 := ANGLE_Y_DEG; */
+
+SELECT, FLAG=TWISS, CLEAR;
+SELECT, FLAG=TWISS, COLUMN=name, s, betx, bety, alfx, alfy, ANGLE_X_DEG, MVAR1;!, MVAR2;
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;!, FILE='twiss.twiss';
+
+/******************************************************************
+ ** Matching
+ ******************************************************************/
+MATCH, SEQUENCE=clearSequence, SLOW=TRUE, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE=centreTank, MVAR1>5.;
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE=centreTank, MVAR2>5.; */
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=20; */
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety>20, bety<30;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx<1e-2;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety>20, bety<30;
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx=20; */
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety>20, bety<30;
+ 	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+ 	VARY, name=k355, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+	VARY, name=k360, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+	VARY, name=k510, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+	VARY, name=k515, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+	VARY, name=k520, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
+	VARY, name=k350, STEP=1e-6;
+	VARY, name=k355, STEP=1e-6;
+	VARY, name=k360, STEP=1e-6;
+	VARY, name=k510, STEP=1e-6;
+	VARY, name=k515, STEP=1e-6;
+	VARY, name=k520, STEP=1e-6;
+	SIMPLEX, CALLS=1e6, TOLERANCE=1.0e-21;
+ ENDMATCH;
+
+SELECT, FLAG=TWISS, COLUMN=name, s, betx, bety;
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='final.twiss';
+PLOT, HAXIS=S, VAXIS1=BETX, VAXIS2=BETY, colour=100, HMAX=5.53;
+
+value ANGLE_X_DEG;
+STOP;

@@ -13,11 +13,11 @@ TITLE, "CLEAR VHEE exp.";
  ******************************************************************/
 ENERGY = 0.200; !GeV
 ALFX0 = -0.5;
-BETX0 = 10.;
+BETX0 = 20.;
 ALFY0 = -0.5;
-BETY0 = 10.;
-EMIX = 10e-6;
-EMIY = 10e-6;
+BETY0 = 20.;
+EMIX = 4e-6;
+EMIY = 4e-6;
 
 /******************************************************************
  ** Enter your desiderata
@@ -43,45 +43,54 @@ call, file='sequence.seq'; !strengths are defined in the sequence file
 
 beam, PARTICLE=electron, ENERGY=ENERGY;
 USE, SEQUENCE=clearSequence;
-
 /* SURVEY, SEQUENCE=clearSequence, FILE='survey.out'; */
-TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;!, FILE='twiss.twiss';
 
 /******************************************************************
- ** Matching
+ ** TWISS and custom variables settings
  ******************************************************************/
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;
+SIGMA_X := 1e3*SQRT(TABLE(twiss, betx)*EMIX); ! beam size variables
+SIGMA_Y := 1e3*SQRT(TABLE(twiss, bety)*EMIY);
+
+SELECT, FLAG=twiss, CLEAR;
+SELECT, FLAG=twiss, COLUMN=name, s, SIGMA_X, SIGMA_Y, betx, bety;
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='twiss0.twiss';
+
+/******************************************************************
+ ** Matching symmetric optics
+ ******************************************************************/
+overcurrent = 1.5;
 MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=20;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=20;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx<1e-2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety<1e-2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx=20;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety=20;
- 	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
- 	VARY, name=k355, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
-	VARY, name=k360, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
-	VARY, name=k510, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
-	VARY, name=k515, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
-	VARY, name=k520, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
-	VARY, name=k350, STEP=1e-6;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx>11, betx<12;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety>11, bety<12;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx<3.5e-3;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety<3.5e-3;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx>11, betx<12;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety>11, bety<12;
+ 	VARY, name=k350, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent;
+ 	VARY, name=k355, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent;
+	VARY, name=k360, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent;
+	VARY, name=k510, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent;
+	VARY, name=k515, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent;
+	VARY, name=k520, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent;
+	/* VARY, name=k350, STEP=1e-6;
 	VARY, name=k355, STEP=1e-6;
 	VARY, name=k360, STEP=1e-6;
 	VARY, name=k510, STEP=1e-6;
 	VARY, name=k515, STEP=1e-6;
-	VARY, name=k520, STEP=1e-6;
-	SIMPLEX, CALLS=1e6, TOLERANCE=1.0e-21;
+	VARY, name=k520, STEP=1e-6; */
+	SIMPLEX, CALLS=1e9, TOLERANCE=1.0e-24;
  ENDMATCH;
 
-SELECT, FLAG=TWISS, COLUMN=name, s, betx, bety;
 TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='final.twiss';
 PLOT, HAXIS=S, VAXIS1=BETX, VAXIS2=BETY, colour=100, HMAX=5.53;
 
-DISTANCE = TABLE(TWISS, centreTank, S)-TABLE(TWISS, startTank, S);
-ANGLE = ATAN(SQRT(EMIX*(TABLE(TWISS, startTank, betx) - TABLE(TWISS, centreTank, betx)))/DISTANCE);
-value ANGLE;
-
-ANGLE_DEG = ANGLE*360/(2*PI);
-value ANGLE_DEG;
-
+DISTANCE := TABLE(TWISS, centreTank, S)-TABLE(TWISS, startTank, S);
+ANGLE_X := ATAN(SQRT(EMIX*(TABLE(TWISS, startTank, betx) - TABLE(TWISS, centreTank, betx)))/DISTANCE);
+ANGLE_X_DEG := ANGLE_X*360/(2*PI);
+ANGLE_Y := ATAN(SQRT(EMIY*(TABLE(TWISS, startTank, bety) - TABLE(TWISS, centreTank, bety)))/DISTANCE);
+ANGLE_Y_DEG := ANGLE_Y*360/(2*PI);
+value ANGLE_X_DEG;
+value ANGLE_Y_DEG;
 
 STOP;

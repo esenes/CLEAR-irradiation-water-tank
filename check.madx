@@ -1,0 +1,51 @@
+/******************************************************************
+ ** MAD-X CLEAR OPTICS FOR THE VHEE IRRADIATION EXPERIMENT
+ ** The script to check the output of the match ...
+ **
+ ** Eugenio Senes
+ ** Created 03/09/18
+ ******************************************************************/
+TITLE, "CLEAR VHEE exp.";
+/******************************************************************
+ ** Beam parameters from measurements
+ ******************************************************************/
+ENERGY = 0.200; !GeV
+ALFX0 = -0.5;
+BETX0 = 20.;
+ALFY0 = -0.5;
+BETY0 = 20.;
+EMIX = 4e-6;
+EMIY = 4e-6;
+
+/******************************************************************
+ ** There we go !
+ ******************************************************************/
+k350	:=	12.2247;
+k355	:=	-14.1871;
+k360	:=	16.7886;
+k510	:=	16.7334;
+k515	:=	-16.5654;
+/* k520	:=	21.6735; */
+k520 := 16.8*1.45; 
+
+
+call, file='sequence.seq'; !strengths are defined in the sequence file
+
+beam, PARTICLE=electron, ENERGY=ENERGY;
+USE, SEQUENCE=clearSequence;
+/* SURVEY, SEQUENCE=clearSequence, FILE='survey.out'; */
+
+/******************************************************************
+ ** TWISS and custom variables settings
+ ******************************************************************/
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;
+SIGMA_X := 1e3*SQRT(TABLE(twiss, betx)*EMIX); ! beam size variables
+SIGMA_Y := 1e3*SQRT(TABLE(twiss, bety)*EMIY);
+
+SELECT, FLAG=twiss, CLEAR;
+SELECT, FLAG=twiss, COLUMN=name, s, SIGMA_X, SIGMA_Y, betx, bety;
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='check.twiss';
+
+PLOT, HAXIS=S, VAXIS1=BETX, VAXIS2=BETY, colour=100, HMAX=5.53;
+
+STOP;

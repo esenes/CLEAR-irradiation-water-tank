@@ -14,7 +14,36 @@ clearSequence:	SEQUENCE, L=5.522 , REFER=entry;
 	MQD515	:	qd, k1 := k515, at= 4.346;
 	MQF520	: qf,	k1 := k520, at= 4.796;
 
-	startTank:	MARKER, at= 5.222;
-	centreTank:	MARKER, at=	5.372;
+	startTank	:	MARKER, at= 5.222;
+	! active foils
+	F1				: MARKER, at= 5.232;
+	F2				: MARKER, at= 5.242;
+	F3				: MARKER, at= 5.252;
+	F4				: MARKER, at= 5.262;
+	F5				: MARKER, at= 5.272;
+	F6				: MARKER, at= 5.282;
+	F7				: MARKER, at= 5.292;
+	F8				: MARKER, at= 5.302;
+	F9				: MARKER, at= 5.312;
+	F10				: MARKER, at= 5.322;
+	F11				: MARKER, at= 5.332;
+	F12				: MARKER, at= 5.342;
+	F13				: MARKER, at= 5.352;
+	F14				: MARKER, at= 5.362;
+	centreTank:	MARKER, at=	5.372;  ! Foil #15
+	F16				: MARKER, at= 5.382;
+	F17				: MARKER, at= 5.392;
+	F18				: MARKER, at= 5.402;
+	F19				: MARKER, at= 5.412;
+	F20				: MARKER, at= 5.422;
+	F21				: MARKER, at= 5.432;
+	F22				: MARKER, at= 5.442;
+	F23				: MARKER, at= 5.452;
+	F24				: MARKER, at= 5.462;
+	F25				: MARKER, at= 5.472;
+	F26				: MARKER, at= 5.482;
+	F27				: MARKER, at= 5.492;
+	F28				: MARKER, at= 5.502;
+	F29				: MARKER, at= 5.512;
 	endTank:		MARKER, at= 5.522;
 ENDSEQUENCE;
