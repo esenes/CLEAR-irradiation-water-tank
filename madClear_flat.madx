@@ -60,20 +60,17 @@ TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, F
  ** Matching symmetric optics
  ******************************************************************/
 overcurrent = 1.5;
-
-/* k360 := 16.8; */
-
 MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx>11, betx<12;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety>11, bety<12;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx<3.5e-3;
-	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety<3.5e-3; */
-	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx>11, betx<12;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety>11, bety<12; */
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=0.8;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=0.8;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx=0.8;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety=0.8;
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank',  betx<1;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank',  bety<1; */
 	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQD355', bety<80; */
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQD515', betx<40;
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQD515', betx<40; */
 	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQF520', betx<60; */
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety<14;
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety<14; */
 	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
 	VARY, name=k355, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
 	VARY, name=k360, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
