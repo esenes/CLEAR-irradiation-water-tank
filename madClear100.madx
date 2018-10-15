@@ -11,7 +11,7 @@ TITLE, "CLEAR VHEE exp.";
 /******************************************************************
  ** Beam parameters from measurements
  ******************************************************************/
-ENERGY = 0.200; !GeV
+ENERGY = 0.100; !GeV
 ALFX0 = -0.5;
 BETX0 = 20.;
 ALFY0 = -0.5;
@@ -44,7 +44,7 @@ SIGMA_Y := 1e3*SQRT(TABLE(twiss, bety)*EMIY);
 
 SELECT, FLAG=twiss, CLEAR;
 SELECT, FLAG=twiss, COLUMN=name, s, SIGMA_X, SIGMA_Y, betx, bety;
-TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='twiss0.twiss';
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;
 
 /******************************************************************
  ** Matching symmetric optics
@@ -52,32 +52,44 @@ TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, F
 overcurrent = 1.;
 
 MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx=5.5;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=5.5;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx=5.5;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='F25', betx<3.5e-3;
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx<3.5e-3; */
+
 	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety<3.5e-3; */
-	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', betx>11, betx<12;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='endTank', bety>11, bety<12; */
-	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQD355', bety<80; */
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQD515', betx<60;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQF360', betx<60;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety=5.5;
-	VARY, name=k350, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
-	/* VARY, name=k355, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
-	VARY, name=k360, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
-	VARY, name=k510, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
-	/* VARY, name=k515, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
-	/* VARY, name=k520, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
- 	/* VARY, name=k350, STEP=1e-6; */
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='F25', bety=3;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx>10, betx<12;
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx>10, betx<12; */
+
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety>10, bety<12; */
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=3;
+
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQF520',  betx<60;
+
+	WEIGHT, BETX=1, BETY=2;
+
+
+	/* VARY, name=k350, STEP=1e-6, LOWER=-33.6, UPPER=33.6; */
+	/* VARY, name=k355, STEP=1e-6, LOWER=-33.6, UPPER=33.6; */
+	/* VARY, name=k360, STEP=1e-6, LOWER=-33.6, UPPER=33.6; */
+	/* VARY, name=k510, STEP=1e-6, LOWER=-33.6, UPPER=33.6; */
+	/* VARY, name=k515, STEP=1e-6, LOWER=-33.6, UPPER=33.6; */
+	/* VARY, name=k520, STEP=1e-6, LOWER=-33.6, UPPER=33.6; */
+ 	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent; */
+ 	/* VARY, name=k355, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent; */
+	/* VARY, name=k360, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent; */
+	/* VARY, name=k510, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent; */
+	/* VARY, name=k515, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent; */
+	/* VARY, name=k520, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent; */
+	VARY, name=k350, STEP=1e-6;
 	VARY, name=k355, STEP=1e-6;
-	/* VARY, name=k360, STEP=1e-6; */
-	/* VARY, name=k510, STEP=1e-6; */
+	VARY, name=k360, STEP=1e-6;
+	VARY, name=k510, STEP=1e-6;
 	VARY, name=k515, STEP=1e-6;
 	VARY, name=k520, STEP=1e-6;
 	SIMPLEX, CALLS=1e9, TOLERANCE=1.0e-21;
  ENDMATCH;
 
-TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='flat.twiss';
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='final.twiss';
 PLOT, HAXIS=S, VAXIS1=BETX, VAXIS2=BETY, colour=100, HMAX=5.53;
 
 DISTANCE := TABLE(TWISS, centreTank, S)-TABLE(TWISS, startTank, S);

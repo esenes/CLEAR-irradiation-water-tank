@@ -1,6 +1,8 @@
 /******************************************************************
  ** MAD-X CLEAR OPTICS FOR THE VHEE IRRADIATION EXPERIMENT
- ** The script to check the output of the match ...
+ ** This is the first attempt, optimisation has to be done by hand
+ ** using the match and try to get reasonable values for the betas
+ **	at the entrance and waist of the tank
  **
  ** Eugenio Senes
  ** Created 03/09/18
@@ -20,18 +22,15 @@ EMIY = 4e-6;
 /******************************************************************
  ** There we go !
  ******************************************************************/
-k350	:=	12.2247;
-k355	:=	-15.43;
-k360	:=	16.90;
-k510	:=	15.89;
-k515	:=	-15.68;
-/* k520	:=	21.6735; */
-/* k520 := 21.87; */
-k520 := 23.5;
 
+k360  :=  1.68000e+01;
+k510  :=  1.68000e+01;
+k350  :=  9.96429e+00;
+k355  := -1.44829e+01;
+k515  := -1.61339e+01;
+k520  :=  1.68e+01;
 
-
-call, file='sequence.seq'; !strengths are defined in the sequence file
+call, file='../sequence.seq'; !strengths are defined in the sequence file
 
 beam, PARTICLE=electron, ENERGY=ENERGY;
 USE, SEQUENCE=clearSequence;
@@ -46,8 +45,10 @@ SIGMA_Y := 1e3*SQRT(TABLE(twiss, bety)*EMIY);
 
 SELECT, FLAG=twiss, CLEAR;
 SELECT, FLAG=twiss, COLUMN=name, s, SIGMA_X, SIGMA_Y, betx, bety;
-TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='check_150.twiss';
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;!, FILE='twiss0.twiss';
 
+
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='15cm.twiss';
 PLOT, HAXIS=S, VAXIS1=BETX, VAXIS2=BETY, colour=100, HMAX=5.53;
 
 STOP;

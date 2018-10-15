@@ -14,6 +14,8 @@ clearSequence:	SEQUENCE, L=5.522 , REFER=entry;
 	MQD515	:	qd, k1 := k515, at= 4.346;
 	MQF520	: qf,	k1 := k520, at= 4.796;
 
+	endMQF520 : MARKER, at= 4.796 + 0.226;
+
 	startTank	:	MARKER, at= 5.222;
 	! active foils
 	F1				: MARKER, at= 5.232;
