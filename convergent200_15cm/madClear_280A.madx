@@ -22,12 +22,14 @@ EMIY = 4e-6;
 /******************************************************************
  ** There we go !
  ******************************************************************/
-k360  :=                    1.68000e+01  ;
-k510  :=                    1.68000e+01  ;
-k350  :=                    1.30870e+01 ;
-k355  :=                   -1.61506e+01 ;
-k515  :=                   -13.058 ;
-k520  :=                    9.223 ;
+
+k360  :=  1.68000e+01;
+k510  :=  1.68000e+01;
+k350  :=  9.91385e+00;
+k355  := -1.42702e+01;
+k515  := -1.55414e+01;
+k520  :=  2.52e+01;
+
 call, file='../sequence.seq'; !strengths are defined in the sequence file
 
 beam, PARTICLE=electron, ENERGY=ENERGY;
@@ -46,7 +48,7 @@ SELECT, FLAG=twiss, COLUMN=name, s, SIGMA_X, SIGMA_Y, betx, bety;
 TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence;!, FILE='twiss0.twiss';
 
 
-TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='flat200.twiss';
+TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, FILE='15cm.twiss';
 PLOT, HAXIS=S, VAXIS1=BETX, VAXIS2=BETY, colour=100, HMAX=5.53;
 
 STOP;

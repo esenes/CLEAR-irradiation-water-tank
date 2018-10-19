@@ -12,22 +12,12 @@ TITLE, "CLEAR VHEE exp.";
  ** Beam parameters from measurements
  ******************************************************************/
 ENERGY = 0.200; !GeV
-ALFX0 = -0.5;
-BETX0 = 20.;
-ALFY0 = -0.5;
-BETY0 = 20.;
+ALFX0 = 1.04;
+BETX0 = 9.;
+ALFY0 = 0.23;
+BETY0 = 7.25;
 EMIX = 4e-6;
 EMIY = 4e-6;
-
-/******************************************************************
- ** Enter your desiderata
- ******************************************************************/
-/* BETx_centre = 1e-3;
-BETy_centre = 1e-3;
-BETx_init = 1;
-BETy_init = 1;
-BETx_end = 1;
-BETy_end = 1; */
 
 /******************************************************************
  ** There we go !
@@ -62,17 +52,17 @@ TWISS, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0, SEQUENCE=clearSequence, F
 overcurrent = 1.3;
 
 MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='F20', betx<3.5e-3;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='F20', bety = 2;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='F5', betx>10, betx<12;
-	CONSTRAINT, SEQUENCE=clearSequence, RANGE='F5', bety = 2;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', betx < 3e-3;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='centreTank', bety>10, bety<25;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', betx>9, betx<12;
+	CONSTRAINT, SEQUENCE=clearSequence, RANGE='startTank', bety=40;
 
-	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQD515', betx<70, bety<70; */
+	/* CONSTRAINT, SEQUENCE=clearSequence, RANGE='MQD355', betx<70, bety<70; */
 
 	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
 	/* VARY, name=k355, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
 	VARY, name=k360, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
-	VARY, name=k510, STEP=1e-6, LOWER=-16.8, UPPER=16.8;
+	/* VARY, name=k510, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
 	/* VARY, name=k515, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
 	/* VARY, name=k520, STEP=1e-6, LOWER=-16.8, UPPER=16.8; */
  	/* VARY, name=k350, STEP=1e-6, LOWER=-16.8*overcurrent, UPPER=16.8*overcurrent; */
@@ -84,7 +74,7 @@ MATCH, SEQUENCE=clearSequence, ALFX=alfx0, ALFY=alfy0, BETX=betx0, BETY=bety0;
 	VARY, name=k350, STEP=1e-6;
 	VARY, name=k355, STEP=1e-6;
 	/* VARY, name=k360, STEP=1e-6; */
-	/* VARY, name=k510, STEP=1e-6; */
+	VARY, name=k510, STEP=1e-6;
 	VARY, name=k515, STEP=1e-6;
 	VARY, name=k520, STEP=1e-6;
 	SIMPLEX, CALLS=1e9, TOLERANCE=1.0e-21;
